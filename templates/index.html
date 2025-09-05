@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>XSD → XML Generator</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+      .card { max-width: 800px; margin: 0 auto; padding: 1.5rem; border: 1px solid #ddd; border-radius: 12px; }
+      label { display:block; font-weight:600; margin-top: 1rem; }
+      input[type="text"] { width: 100%; padding: .5rem; border-radius: 8px; border: 1px solid #ccc; }
+      input[type="file"] { margin-top: .25rem; }
+      .row { display:flex; gap:1rem; }
+      .row > div { flex:1; }
+      .btn { background: black; color: white; padding: .75rem 1rem; border: 0; border-radius: 10px; margin-top: 1rem; cursor: pointer; }
+      .hint { color:#555; font-size:.9rem; }
+      .flash { background: #fff4e5; border: 1px solid #ffd19b; padding: .75rem; border-radius: 10px; margin-bottom: 1rem; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>XSD → XML Generator</h1>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for m in messages %}
+            <div class="flash">{{ m }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" action="/generate" enctype="multipart/form-data">
+        <label>XSD file (.xsd)
+          <input type="file" name="xsd" accept=".xsd" required />
+        </label>
+
+        <label>Excel file (.xlsx)
+          <input type="file" name="excel" accept=".xlsx" required />
+        </label>
+
+        <div class="row">
+          <div>
+            <label>Root element name (optional)</label>
+            <input type="text" name="root_element" placeholder="Leave blank to auto-detect from XSD" />
+            <div class="hint">If we can't auto-detect, enter your root element here.</div>
+          </div>
+          <div>
+            <label>Row element name</label>
+            <input type="text" name="row_element" value="Record" />
+            <div class="hint">Each Excel row will become a &lt;Record&gt; by default.</div>
+          </div>
+        </div>
+
+        <label>
+          <input type="checkbox" name="validate_flag" checked />
+          Validate generated XML against the XSD
+        </label>
+
+        <button class="btn" type="submit">Generate XML</button>
+      </form>
+    </div>
+  </body>
+</html>
