@@ -66,10 +66,12 @@ def build_xml_from_excel(excel_file):
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        if "file" not in request.files:
-            return "No file uploaded", 400
+        if "excel" not in request.files:
+    return "No Excel file uploaded", 400
 
-        file = request.files["file"]
+file = request.files["excel"]
+
+     
 
         try:
             xml_tree = build_xml_from_excel(file)
